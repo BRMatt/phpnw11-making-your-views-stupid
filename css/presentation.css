@@ -1,18 +1,25 @@
-#Cover h2 {
-  color:#FFF;
-  text-align:center;
-  font-size:70px;
-  margin-top: 18%;
-}
-
-#Cover h3 {
+#cover h2, #cover-corrected h2 {
+  color: #FFF;
   text-align: center;
-  font-size: 40px;
-}
+  font-size: 70px;
+  margin-top: 18%; }
+#cover h3, #cover-corrected h3 {
+  text-align: center; }
+  #cover h3 a, #cover-corrected h3 a {
+    border-bottom: none; }
+
+#cover-corrected em {
+  color: red; }
 
 header.caption a {
   color: #3C3D40;
-  font-weight: bolder;
-}
+  font-weight: bolder; }
 
+.slide section:before {
+  background: none; }
 
+.slide:after {
+  content: none; }
+
+.slide.shout header {
+  color: #FFF; }
