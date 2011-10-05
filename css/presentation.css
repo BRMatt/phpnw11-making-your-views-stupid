@@ -1,11 +1,11 @@
-#cover h2, #cover-corrected h2 {
+.slide.centered h2 {
   color: #FFF;
   text-align: center;
   font-size: 70px;
   margin-top: 18%; }
-#cover h3, #cover-corrected h3 {
+.slide.centered h3 {
   text-align: center; }
-  #cover h3 a, #cover-corrected h3 a {
+  .slide.centered h3 a {
     border-bottom: none; }
 
 #cover-corrected em {
@@ -23,3 +23,9 @@ header.caption a {
 
 .slide.shout header {
   color: #FFF; }
+
+#smarty h2 {
+  background-image: url(../images/smarty.jpg);
+  background-repeat: no-repeat;
+  background-position: 50%;
+  text-indent: -9999px; }

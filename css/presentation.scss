@@ -1,5 +1,5 @@
 
-#cover, #cover-corrected{
+.slide.centered{
 	h2 {
 		color:#FFF;
 		text-align:center;
@@ -37,4 +37,9 @@ header.caption a {
 	color: #FFF;
 }
 
-
+#smarty h2 {
+	background-image: url(../images/smarty.jpg);
+	background-repeat: no-repeat;
+	background-position: 50%;
+	text-indent: -9999px;
+}
