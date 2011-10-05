@@ -98,3 +98,4 @@ PROBABLY RUNNING OUT OF TIME ABOUT NOW.
 ## Notes
 
 http://nicksda.apotomo.de/2011/10/rails-misapprehensions-helpers-are-shit/
+http://techportal.ibuildings.com/2010/11/02/creative-mvc-meet-the-viewmodel-pattern/
