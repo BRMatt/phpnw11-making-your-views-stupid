@@ -110,6 +110,23 @@ accessor methods.
 Here the beers method gets a set of all the beers the user likes and returns it
 to the template.
 
+# Ways we can improve this example
+
+As you probably noticed, the template has direct access to the model, which depending on
+how your models work could mean your templates can call state changing methods such as delete,
+update etc.
+
+
+# Advantages of using Mustache
+
+Parent language agnostic - If you write mustache templates for your site they'll
+work in PHP, Javascript, Ruby, Python and so on.
+
+Output is automatically escaped - Makes it extremely easy to prevent XSS attacks
+
+Because you've de-coupled your logic from the presentation layer you can unit test
+it to make sure your templates are receiving the data they expect!
+
 ## Notes
 
 http://nicksda.apotomo.de/2011/10/rails-misapprehensions-helpers-are-shit/
