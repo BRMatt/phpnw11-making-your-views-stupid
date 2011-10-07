@@ -9,21 +9,34 @@ Today I'm going to be talking about making your views stupid, or rather
 
 Simple code is good code.  it's easy to write, easy to debug and easy to maintain.
 
-Nowadays a lot of projects follow the MVC design pattern to try and keep things as DRY
-as possible, but back in the day, everything was thrown together in a huge mess.
+What do I mean by simple? I mean keeping your templates as isolated as possible from 
+your PHP code.
 
-After a while people start realising that trying to do business logic in the middle
-of their template isn't the greatest of ideas, especially when the client wants the
-site to be redesigned.
+# PHP is a programming language
 
-So when template languages such as Smarty come along promising to end all those problems
-people naturally jump on the bandwagon.
+The more you mix markup with logic the harder it is to adapt your system down the line.
 
-Unfortunately Smarty doesn't really solve the problem as it's essentially PHP
-with a funky syntax. Sure, the business logic is /partially/ separated from presentation
-logic, but there's still a lot of stuff left in there.  Hell, you can even embed
-php within the smarty templates, thus removing any theoretical benefit of using
-Smarty.
+Anyone who's watched a couple of PHP projects over the past decade will realise this.
+
+# ASAP ASAP ASAP
+
+In the beginning PHP (aka Personal Homepage Tools) was a tool for creating dynamic websites
+as quickly as possible. As we all know, the more you rush things, the more mistakes you make.
+
+After a while people started realising that trying to do business logic in the middle
+of a template isn't the greatest of ideas, especially when you need to maintain the project!
+
+# Smarty
+
+After a while templating languages come along promising to make life easier by keeping the
+two domains separate... except that it doesn't!
+
+You end up refactoring some of the logic out of your templates but because Smarty's syntax
+is basically a funky version of PHP's you still get logic creeping into the templates.
+
+Hell, you can even embed PHP in Smarty templates, thus eliminating any possible benefit!
+
+#MVC
 
 Finally, MVC makes its way into the PHP ecosphere. People are told to take business
 logic out of their views and controllers and put it in their models.
@@ -31,7 +44,7 @@ logic out of their views and controllers and put it in their models.
 However there are lots of little bits of logic that creep into templates. Things
 such as working out how many news items to display in a sidebar or which parser
 should be used to render the user's post all make it harder to re-use templates and
-keep them simple for modification down the line.
+keep them simple for maintaining down the line.
 
 This kind of logic doesn't really belong in your model (because it's related to
 how the app looks, not how it works) and doesn't belong in your controller (because
@@ -45,7 +58,7 @@ allows looping, basic if/else conditionals, including partial templates and echo
 data. No assignments, macro/function definitions, no calling methods with parameters.
 
 So where does all the logic go? Well, it's all stored in an object called a View Model,
-which if you were to look at a diagram of the MVC pattern,
+which sits between the View and the Controller.
 
 # AWESOME SLIDE SHOWING THIS
 
@@ -67,11 +80,15 @@ Using Mustache your controller could look like this:
 All we have to do is create a new instance of the view model, pass the requested
 user to it, and then call render. Nice. simple. code.
 
+As you can see here, I'm creating a new Mustache object to which I pass my view object.
+Now this is obviously a bit cumbersome and I usually use a library called Kostache
+which keeps the Mustache invocation within the view class itself, so you can just do:
+
 Now imagine our template looks like this
 
 # Template Slide
 
-All we're doing here is echoing out the user's name and their favourite beers.
+All we're doing here is echoing out the user's name and looping over their favourite beers.
 
 I know it's terrible, but we can get away with it because we're developers - 
 the designers can worry about making it pretty!
@@ -90,10 +107,8 @@ As I can only fit about 10 lines on a slide I've used public variables for
 simplicity, but if you want type hinting you could easily assign your own
 accessor methods.
 
-Here the `favourite_beers` method uses the assigned model to fetch the user's
-favourite beers.
-
-PROBABLY RUNNING OUT OF TIME ABOUT NOW.
+Here the beers method gets a set of all the beers the user likes and returns it
+to the template.
 
 ## Notes
 

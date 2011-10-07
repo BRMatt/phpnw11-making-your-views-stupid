@@ -14,8 +14,20 @@
 	}
 } 
 
-#cover-corrected em {
-	color: red;
+#cover-corrected, #language-distinctions{
+	em {
+		color: red;
+	}
+} 
+
+#language-distinctions{
+	h2 {
+		font-size: 68px;
+	}
+	h3 {
+		color: #fff;
+		font-size: 68px;
+	}
 }
 
 header.caption a {
@@ -27,6 +39,10 @@ header.caption a {
 	section:before{
 		background: none;
 	}
+	img {
+		display: block;
+		margin: 18px auto;
+	}
 }
 
 .slide:after{
@@ -37,9 +53,14 @@ header.caption a {
 	color: #FFF;
 }
 
-#smarty h2 {
-	background-image: url(../images/smarty.jpg);
-	background-repeat: no-repeat;
-	background-position: 50%;
-	text-indent: -9999px;
+.slide.bg img {
+	margin-top: -20px;
+}
+
+.slide.bg .footnote {
+	position: absolute;
+	bottom: -20px;
+	right: 20px;
+	font-size: 12px;
+	background-color: #FEFEFE;
 }

@@ -11,7 +11,8 @@
 <body class="list">
 	<header class="caption">
 		<h1>Making your views stupid</h1>
-    <p>Matt Button (<a href="http://twitter.com/BRMatt">@BRMatt</a>)</p>
+		<p>Matt Button (<a href="http://twitter.com/BRMatt">@BRMatt</a>)</p>
+		<p><a href="./notes.md">View the presentation notes</a></p>
 	</header>
 	<div class="slide bg centered" id="cover"><div>
 		<section>
@@ -28,34 +29,145 @@
 			</header>
 		</section>
 	</div></div>
-	<div class="slide" id="KISS"><div>
+	<div class="slide bg centered" id="language-distinctions"><div>
 		<section>
 			<header>
-				<h2>The PHP Legacy</h2>
+				<h2>PHP is a <em>programming</em> language</h2>
+				<h3>HTML is a <em>markup</em> language</h3>
+			</header>
+		</section>
+	</div></div>
+	<div class="slide" id="asap-coding"><div>
+		<section>
+			<header>
+				<h2>"I want this done ASAP, I don't care how the code looks"</h2>
+			</header>
+			<p>Business logic is deeply entwined with presentation logic</p>
+			<p>Makes it a pain to maintain or expand down the line</p>
+			<p>Typically has no automated testing</p>
+		</section>
+	</div></div>
+	<div class="slide" id="smarty-coding"><div>
+		<section>
+			<header>
+				<h2>Smarty / Other templating languages</h2>
+			</header>
+			<p>Promises to separate business/presentation logic, but doesn't really</p>
+			<p>Has an even funkier syntax than PHP</p>
+			<p>Allows embedding PHP code in templates</p>
+		</section>
+	</div></div>
+	<div class="slide" id="mvc"><div>
+		<section>
+			<header>
+				<h2>MVC design pattern</h2>
+			</header>
+			<img src="images/mvc.png" />
+			<p>Dicates that all business logic should take place in the model</p>
+			<p>"Wisdom of the crowds" is to have fat Models and skinny Controllers</p>
+		</section>
+	</div></div>
+	<div class="slide centered bg" id="mustache-man"><div>
+		<section>
+			<img src="./images/mustache.jpg">
+			<p class="footnote">http://www.flickr.com/photos/mogus/57114273/</p>
+		</section>
+	</div></div>
+	<div class="slide" id="mustache"><div>
+		<section>
+			<header>
+				<h2>The Mustache template language</h2>
+			</header>
+			<p>Reduced syntax; only allows if/else, loops, echo and including partials</p>
+			<p>Language agnostic, implemented in <a href="http://github.com/bobthecow/mustache.php">PHP</a> and <a href="http://mustache.github.com">many other languages</a></p>
+		</section>
+	</div></div>
+	<div class="slide" id="mustache-diagram"><div>
+		<section>
+			<header>
+				<h2>The Mustache template language</h2>
+			</header>
+			<img src="./images/mvvmc.png">
+		</section>
+	</div></div>
+	<div class="slide" id="example-1-controller"><div>
+		<section>
+			<header>
+				<h2>BEER LOVERS <3 - Controller</h2>
 			</header>
 			<pre>
 				<code>&lt;?php</code>
-				<code>include('header.php');</code>
-				<code>$sql = 'SELECT * FROM posts WHERE category='.$_GET['cat'];</code>
-				<code>$posts = mysql_query($sql);</code>
-				<code>print '&lt;table&gt;';</code>
-				<code>while($post = mysql_fetch_assoc($posts))</code>
-				<code>{</code>
-				<code>	print '&lt;tr&gt;&lt;td&gt;'.$post['title'].'&lt;/td&gt;' ... ;</code>
+				<code>class Controller_User extends Controller_Site {</code>
+				<code>	public function action_view() {</code>
+				<code>		$mustache = new Mustache;</code>
+				<code>		$view = new View_User_Profile;</code>
+				<code>		$view->user = User::find($_GET['id']);</code>
+				<code>		$this->response->body($mustache->render(</code>
+				<code>			'user/profile', $view));</code>
+				<code>	}</code>
 				<code>}</code>
-				<code>print '&lt;/table&gt;'
 			</pre>
 		</section>
 	</div></div>
-	<div class="slide bg centered" id="smarty"><div>
+	<div class="slide" id="example-1-controller-b"><div>
 		<section>
 			<header>
-				<h2>Smarty</h2>
+				<h2>BEER LOVERS <3 - Controller</h2>
 			</header>
+			<pre>
+				<code>&lt;?php</code>
+				<code>class Controller_User extends Controller_Site {</code>
+				<code>	public function action_view() {</code>
+				<code>		$view = new View_User_Profile;</code>
+				<code>		$view->user = User::find($_GET['id']);</code>
+				<code>		$this->response->body($view->render());</code>
+				<code>	}</code>
+				<code>}</code>
+			</pre>
 		</section>
 	</div></div>
-
-
+	<div class="slide" id="example-1-template"><div>
+		<section>
+			<header>
+				<h2>BEER LOVERS <3 - Template</h2>
+			</header>
+			<pre>
+				<code>&lt;h1&gt;<mark>{{user.name}}</mark> the drunk!&lt;/h2&gt;</code>
+				<code>&lt;p&gt;<mark>{{user.name}}</mark> likes these beers:&lt;/p&gt;</code>
+				<code>&lt;ul&gt;</code>
+				<code><mark>{{#beers}}</mark></code>
+				<code>	&lt;li&gt;<mark>{{name}}</mark>&lt;/li&gt;</code>
+				<code><mark>{{/beers}}</mark></code>
+				<code>&lt;/ul&gt;</code>
+			</pre>
+		</section>
+	</div></div>
+	<div class="slide" id="example-1-view-model"><div>
+		<section>
+			<header>
+				<h2>BEER LOVERS <3 - View Class</h2>
+			</header>
+			<pre>
+				<code>&lt;?php</code>
+				<code>class View_User_Profile extends Kostache {</code>
+				<code>	public $user;</code>
+				<code>	public function beers() {</code>
+				<code>		return Beers::find_by_user_id(</code>
+				<code>			$this->user->id</code>
+				<code>		);</code>
+				<code>	}</code>
+				<code>}</code>
+			</pre>
+		</section>
+	</div></div>
+	<div class="slide" id="example-1-output"><div>
+		<section>
+			<header>
+				<h2>BEER LOVERS <3 - Output</h2>
+			</header>
+			<img src="./images/joe-the-drunk.png" />
+		</section>
+	</div></div>
 	<script src="./shower/scripts/script.js"></script>
 </body>
 </html>
