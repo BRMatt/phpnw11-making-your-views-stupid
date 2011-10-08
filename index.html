@@ -80,6 +80,7 @@
 			</header>
 			<p>Reduced syntax; only allows if/else, loops, echo and including partials</p>
 			<p>Language agnostic, implemented in <a href="http://github.com/bobthecow/mustache.php">PHP</a> and <a href="http://mustache.github.com">many other languages</a></p>
+			<p>Uses view models to isolate presentation logic from the template</p>
 		</section>
 	</div></div>
 	<div class="slide" id="mustache-diagram"><div>
@@ -88,6 +89,46 @@
 				<h2>The Mustache template language</h2>
 			</header>
 			<img src="./images/mvvmc.png">
+		</section>
+	</div></div>
+	<div class="slide" id="mustache-syntax-echoing"><div>
+		<section>
+			<header>
+				<h2>Mustache Syntax - Printing</h2>
+			</header>
+			<p><code>{{variable}}</code></p>
+			<p>Prints the value of variable</p>
+			<p>Content is automatically escaped with htmlentities</p>
+			<p>To render raw content use 3 curly braces, i.e. <code>{{{variable}}}</code></p>
+		</section>
+	</div></div>
+	<div class="slide" id="mustache-syntax-sections"><div>
+		<section>
+			<header>
+				<h2>Mustache Syntax - Sections & Inverted Sections</h2>
+			</header>
+			<p><code>{{#variable}}Content{{/content}}</code></p>
+			<p><code>{{^variable}}Content{{/content}}</code></p>
+			<p>"Sections render blocks of text one or more times depending on value of variable in the current context"</p>
+			<p>This can be confusing at first but is relatively simple after a while</p>
+		</section>
+	</div></div>
+	<div class="slide" id="mustache-syntax-partials"><div>
+		<section>
+			<header>
+				<h2>Mustache Syntax - Partials</h2>
+			</header>
+			<p><code>{{> partial_name}}</code></p>
+			<p>Partials must be declared to Mustache parser before template is rendered</p>
+			<p>Partial uses variables in current context, Mustache equivalent of <code>include</code></p>
+		</section>
+	</div></div>
+	<div class="slide" id="mustache-syntax-comments"><div>
+		<section>
+			<header>
+				<h2>Mustache Syntax - Comments</h2>
+			</header>
+			<p><code>{{! LOOK MA, I'M COMMENTING}}</code></p>
 		</section>
 	</div></div>
 	<div class="slide" id="example-1-controller"><div>
@@ -132,7 +173,7 @@
 				<h2>BEER LOVERS <3 - Template</h2>
 			</header>
 			<pre>
-				<code>&lt;h1&gt;<mark>{{user.name}}</mark> the {{status}}!&lt;/h2&gt;</code>
+				<code>&lt;h1&gt;<mark>{{user.name}}</mark> is {{status}}!&lt;/h2&gt;</code>
 				<code>&lt;p&gt;<mark>{{user.name}}</mark> likes these beers:&lt;/p&gt;</code>
 				<code>&lt;ul&gt;</code>
 				<code><mark>{{#beers}}</mark></code>
@@ -198,6 +239,71 @@
 			<img src="./images/joe-the-drunk.png" />
 		</section>
 	</div></div>
+	<div class="slide" id="example-1-view-model-refactored"><div>
+		<section>
+			<header>
+				<h2>BEER LOVERS <3 - View Class</h2>
+			</header>
+			<pre>
+				<code>&lt;?php</code>
+				<code>class View_User_Profile extends Kostache {</code>
+				<code>	public $user;</code>
+				<code>	protected $_user_decorator;</code>
+				<code>	public function beers();</code>
+				<code>	public function user();</code>
+				<code>}</code>
+			</pre>
+		</section>
+	</div></div>
+	<div class="slide" id="example-1-view-model-refactored-view"><div>
+		<section>
+			<header>
+				<h2>BEER LOVERS <3 - View Class</h2>
+			</header>
+			<pre>
+				<code>protected $_user_decorator = NULL;</code>
+				<code>public function user() {</code>
+				<code>	if ($this->_user_decorator === NULL)</code>
+				<code>		$this->_user_decorator = </code>
+				<code>			new User_Decorator($this->_user);</code>
+				<code>	return $this->_user_decorator;</code>
+				<code>}</code>
+			</pre>
+		</section>
+	</div></div>
+	<div class="slide" id="example-1-model-decorator"><div>
+		<section>
+			<header>
+				<h2>BEER LOVERS <3 - Model Decorator</h2>
+			</header>
+			<pre>
+				<code>&lt;?php</code>
+				<code>class User_Decorator {</code>
+				<code>	protected $_model = NULL;</code>
+				<code>	public function __construct(Model_User $model);</code>
+				<code>	public function __get($var);</code>
+				<code>	public function __isset($var);</code>
+				<code>	public function status();</code>
+				<code>}</code>
+			</pre>
+		</section>
+	</div></div>
+	<div class="slide" id="example-1-template-with-refactored-method"><div>
+		<section>
+			<header>
+				<h2>BEER LOVERS <3 - Template</h2>
+			</header>
+			<pre>
+				<code>&lt;h1&gt;{{user.name}} is <mark>{{user.status}}</mark>!&lt;/h2&gt;</code>
+				<code>&lt;p&gt;{{user.name}} likes these beers:&lt;/p&gt;</code>
+				<code>&lt;ul&gt;</code>
+				<code>{{#beers}}</code>
+				<code>	&lt;li&gt;{{name}}&lt;/li&gt;</code>
+				<code>{{/beers}}</code>
+				<code>&lt;/ul&gt;</code>
+			</pre>
+		</section>
+	</div></div>
 	<div class="slide" id="mustache-benefits"><div>
 		<section>
 			<header>
@@ -212,6 +318,25 @@
 			</ul>
 		</section>
 	</div></div>
+	<div class="slide bg centered" id="conclusion"><div>
+		<section>
+			<header>
+				<h2>In conclusion</h2>
+			</header>
+		</section>
+	</div></div>
+	<div class="slide" id="resources"><div>
+		<section>
+			<header>
+				<h2>In conclusion</h2>
+			</header>
+			<p><a href="http://techportal.ibuildings.com/2010/11/02/creative-mvc-meet-the-viewmodel-pattern/">http://techportal.ibuildings.com/2010/11/02/creative-mvc-meet-the-viewmodel-pattern/</a></p>
+			<p><a href="http://github.com/bobthecow/mustache.php/">http://github.com/bobthecow/mustache.php</a></p>
+
+		</section>
+	</div></div>
+
+
 	<script src="./shower/scripts/script.js"></script>
 </body>
 </html>

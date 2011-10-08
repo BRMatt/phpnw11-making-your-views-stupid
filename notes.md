@@ -67,6 +67,8 @@ would sit between the View and the Controller/Model.
 It's based on a Design Pattern by Microsoft called the "Model View ViewModel" pattern.
 If you want to find out more, wikipedia is your friend!
 
+# SOME SLIDES ON MUSTACHE SYNTAX
+
 Now imagine that you're working on a site for... beer lovers(!) who can register
 on the site and add their favourite beers.
 
@@ -116,6 +118,39 @@ As you probably noticed, the template has direct access to the model, which depe
 how your models work could mean your templates can call state changing methods such as delete,
 update etc.
 
+Also the status method is in the wrong place. By defining it here it's only available
+to templates that use that view class. In order to use this method in different areas
+we need to copy & paste it everywhere, or refactor it into a different class.
+
+So to solve these problems we need to create some kind of barrier between the model
+and the template, which is essentially what the Decorator pattern does.
+
+We can then refactor the view class like so:
+
+# View class refactored
+
+The status method has been replaced with a `user` method which returns an `User_Decorator`
+instance wrapped around the model. Now you may have noticed that the new method and the
+public variable `$user` user share the same name.  When there is a choice between a 
+member variable and a method then Mustache will always call the method over the variable.
+
+Now the `User_Decorator` looks like this:
+
+# User Decorator slide
+
+The constructor accepts an instance of `User` and the `__get` / `__isset` magic methods
+are used to proxy requests for variables back to the model. These methods should really
+be defined in a parent class to make the implementation more re-usable, but I've defined
+them here to make it clear what's going on.
+
+The status method works the same as before, except that it uses the `$_model` member
+variable instead of the `$_user` one.
+
+All we need to do now is adapt the template to use the model decorator:
+
+# Refactored template
+
+All we've had to do is tell Mustache to call status within the scope of the user object.
 
 # Advantages of using Mustache
 
@@ -126,6 +161,11 @@ Output is automatically escaped - Makes it extremely easy to prevent XSS attacks
 
 Because you've de-coupled your logic from the presentation layer you can unit test
 it to make sure your templates are receiving the data they expect!
+
+And if you're one of those agile types you can also use view classes to generate
+documentation on what variables are available to your templates!
+
+# In conclusion
 
 ## Notes
 
